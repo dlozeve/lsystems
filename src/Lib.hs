@@ -2,6 +2,7 @@ module Lib
     ( LSystem(..)
     , Instruction(..)
     , iterateLSystem
+    , instructions
     , drawLSystem
     ) where
 
