@@ -1,3 +1,5 @@
 * L-Systems
 
+[[https://travis-ci.org/dlozeve/lsystems][https://travis-ci.org/dlozeve/lsystems.svg?branch=master]]
+[[https://opensource.org/licenses/BSD-3-Clause][https://img.shields.io/badge/License-BSD%203--Clause-blue.svg]]
 
