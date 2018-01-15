@@ -1,0 +1,48 @@
+name:                lsystems
+version:             0.1.0.0
+github:              "dlozeve/lsystems"
+license:             BSD3
+author:              "Dimitri Lozeve"
+maintainer:          "dimitri@lozeve.com"
+copyright:           "Copyright (c) 2018 Dimitri Lozeve"
+
+extra-source-files:
+- README.org
+
+# Metadata used when publishing your package
+# synopsis:            Generate and draw L-Systems
+# category:            Math
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on Github at <https://github.com/dlozeve/lsystems#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- gloss
+
+library:
+  source-dirs: src
+
+executables:
+  lsystems-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lsystems
+
+tests:
+  lsystems-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lsystems
