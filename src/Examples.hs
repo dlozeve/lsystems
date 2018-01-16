@@ -7,6 +7,7 @@ module Examples
   , kochSnowflake
   , sierpinski
   , sierpinskiArrow
+  , dragon
   ) where
 
 import Lib
@@ -69,3 +70,13 @@ sierpinskiArrow = LSystem
                   60
                   10
                   [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
+
+-- | Dragon curve
+dragon = LSystem
+         "FX+-"
+         "FX"
+         [('X', "X+YF+"),
+          ('Y', "-FX-Y")]
+         90
+         10
+         [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
