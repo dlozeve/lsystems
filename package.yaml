@@ -39,7 +39,7 @@ executables:
 tests:
   lsystems-test:
     main:                Tests.hs
-    source-dirs:         [test, app]
+    source-dirs:         test
     ghc-options:
     - -threaded
     - -rtsopts
