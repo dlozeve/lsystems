@@ -2,6 +2,7 @@ module Examples
   ( -- * Space-filling curves
     gosper
   , hilbert
+  , levyC
     -- * Fractals
   , koch
   , kochSnowflake
@@ -32,6 +33,15 @@ hilbert = LSystem
           90
           10
           [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+
+-- | Lévy C curve
+levyC = LSystem
+        "F+-"
+        "F"
+        [('F', "+F--F+")]
+        45
+        10
+        [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Koch curve
 koch = LSystem
