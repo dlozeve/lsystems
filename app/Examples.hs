@@ -1,13 +1,17 @@
 module Examples
-  ( gosper
+  ( -- * Space-filling curves
+    gosper
   , hilbert
+    -- * Fractals
   , koch
+  , kochSnowflake
   , sierpinski
   , sierpinskiArrow
   ) where
 
 import Lib
 
+-- | Gosper curve
 gosper :: LSystem Char
 gosper = LSystem
          "AB+-"
@@ -18,6 +22,7 @@ gosper = LSystem
          10
          [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
+-- | Hilbert curve
 hilbert = LSystem
           "ABF+-"
           "A"
@@ -27,6 +32,7 @@ hilbert = LSystem
           10
           [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
+-- | Koch curve
 koch = LSystem
        "F+-"
        "F"
@@ -35,6 +41,16 @@ koch = LSystem
        10
        [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
+-- | Koch snowflake
+kochSnowflake = LSystem
+                "F+-"
+                "F"
+                [('F', "F+F--F+F")]
+                60
+                10
+                [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+
+-- | Sierpinski triangle
 sierpinski = LSystem
              "AB+-"
              "A-B-B"
@@ -44,6 +60,7 @@ sierpinski = LSystem
              10
              [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
+-- | Sierpinski arrowhead curve
 sierpinskiArrow = LSystem
                   "AB+-"
                   "A"
