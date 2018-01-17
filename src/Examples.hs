@@ -1,6 +1,7 @@
 module Examples
-  ( -- * Space-filling curves
-    gosper
+  ( lsystems
+    -- * Space-filling curves
+  , gosper
   , hilbert
     -- * Fractals
   , levyC
@@ -17,107 +18,133 @@ module Examples
 
 import Lib
 
+-- | List of all exported L-systems
+lsystems :: [LSystem Char]
+lsystems = [gosper, hilbert, levyC, koch, kochSnowflake, sierpinski, sierpinskiArrow,
+            dragon, tree, plant, penroseP3]
+
 -- | Gosper curve
 gosper :: LSystem Char
-gosper = LSystem
-         "AB+-"
-         "A"
-         [ ('A', "A-B--B+A++AA+B-")
-         , ('B', "+A-BB--B-A++A+B")]
-         60
-         10
-         [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
+gosper =
+  LSystem
+  "gosper"
+  "AB+-"
+  "A"
+  [ ('A', "A-B--B+A++AA+B-")
+  , ('B', "+A-BB--B-A++A+B")]
+  60
+  10
+  [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Hilbert curve
-hilbert = LSystem
-          "ABF+-"
-          "A"
-          [ ('A', "-BF+AFA+FB-")
-          , ('B', "+AF-BFB-FA+")]
-          90
-          10
-          [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+hilbert =
+  LSystem
+  "hilbert"
+  "ABF+-"
+  "A"
+  [ ('A', "-BF+AFA+FB-")
+  , ('B', "+AF-BFB-FA+")]
+  90
+  10
+  [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Lévy C curve
-levyC = LSystem
-        "F+-"
-        "F"
-        [('F', "+F--F+")]
-        45
-        10
-        [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+levyC =
+  LSystem
+  "levyC"
+  "F+-"
+  "F"
+  [('F', "+F--F+")]
+  45
+  10
+  [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Koch curve
-koch = LSystem
-       "F+-"
-       "F"
-       [('F', "F+F-F-F+F")]
-       90
-       10
-       [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+koch =
+  LSystem
+  "koch"
+  "F+-"
+  "F"
+  [('F', "F+F-F-F+F")]
+  90
+  10
+  [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Koch snowflake
-kochSnowflake = LSystem
-                "F+-"
-                "F"
-                [('F', "F+F--F+F")]
-                60
-                10
-                [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+kochSnowflake =
+  LSystem
+  "kochSnowflake"
+  "F+-"
+  "F"
+  [('F', "F-F++F-F")]
+  60
+  10
+  [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Sierpinski triangle
-sierpinski = LSystem
-             "AB+-"
-             "A-B-B"
-             [ ('A', "A-B+A+B-A")
-             , ('B', "BB")]
-             120
-             10
-             [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
+sierpinski =
+  LSystem
+  "sierpinski"
+  "AB+-"
+  "A-B-B"
+  [ ('A', "A-B+A+B-A")
+  , ('B', "BB")]
+  120
+  10
+  [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Sierpinski arrowhead curve
-sierpinskiArrow = LSystem
-                  "AB+-"
-                  "A"
-                  [ ('A', "B+A+B")
-                  , ('B', "A-B-A")]
-                  60
-                  10
-                  [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
+sierpinskiArrow =
+  LSystem
+  "sierpinskiArrow"
+  "AB+-"
+  "A"
+  [ ('A', "B+A+B")
+  , ('B', "A-B-A")]
+  60
+  10
+  [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Dragon curve
-dragon = LSystem
-         "FX+-"
-         "FX"
-         [('X', "X+YF+"),
-          ('Y', "-FX-Y")]
-         90
-         10
-         [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+dragon =
+  LSystem
+  "dragon"
+  "FX+-"
+  "FX"
+  [('X', "X+YF+"),
+   ('Y', "-FX-Y")]
+  90
+  10
+  [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
 
 -- | Binary tree
-tree = LSystem
-       "AB+-[]"
-       "A"
-       [('B', "BB")
-       ,('A', "B[+A]-A")]
-       45
-       1
-       [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
-
+tree =
+  LSystem
+  "tree"
+  "AB+-[]"
+  "A"
+  [('B', "BB")
+  ,('A', "B[+A]-A")]
+  45
+  1
+  [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
+  
 -- | Fractal plant
-plant = LSystem
-        "FX+-[]"
-        "X"
-        [('X', "F[-X][X]F[-X]+FX")
-        ,('F', "FF")]
-        25
-        1
-        [('F',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
+plant =
+  LSystem
+  "plant"
+  "FX+-[]"
+  "X"
+  [('X', "F[-X][X]F[-X]+FX")
+  ,('F', "FF")]
+  25
+  1
+  [('F',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
   
 -- | Penrose P3
 penroseP3 =
   LSystem
+  "penroseP3"
   "MNOPA+-[]"
   "[N]++[N]++[N]++[N]++[N]"
   [('M',"OA++PA----NA[-OA----MA]++")

@@ -45,6 +45,22 @@ For tests and documentation, run:
 stack test --haddock
 #+END_SRC
 
+You can choose the L-system and the number of iteration via
+command-line arguments, see the output of ~--help~:
+
+#+BEGIN_SRC 
+lsystems -- Generate L-systems
+
+Usage: lsystems-exe [LSYSTEM] [-n|--iterations N]
+  Generate and draw an L-system
+
+Available options:
+  LSYSTEM                  L-system to generate (default: penroseP3)
+  -n,--iterations N        Number of iterations (default: 5)
+  -h,--help                Show this help text
+#+END_SRC
+
+
 ** Examples provided
 
 *** Space-filling curves

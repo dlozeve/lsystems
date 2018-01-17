@@ -21,6 +21,7 @@ description:         Please see the README on Github at <https://github.com/dloz
 dependencies:
 - base >= 4.7 && < 5
 - gloss
+- optparse-applicative
 
 library:
   source-dirs: src

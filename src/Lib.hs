@@ -14,7 +14,8 @@ import Graphics.Gloss
 
 -- | L-system data type
 data LSystem a = LSystem
-  { alphabet :: [a] -- ^ variables and constants used by the system
+  { name :: String
+  , alphabet :: [a] -- ^ variables and constants used by the system
   , axiom :: [a] -- ^ initial state of the system
   , rules :: [(a, [a])] -- ^ production rules defining how each
                         -- variable can be replaced by a sequence of
@@ -41,9 +42,9 @@ data Instruction =
 -- | Iterate the L-system by n steps
 iterateLSystem :: (Eq a, Integral t) => t -> LSystem a -> LSystem a
 iterateLSystem 0 lsystem = lsystem
-iterateLSystem n (LSystem a ax r ang dist rep) =
-  iterateLSystem (n-1) $ LSystem a ax' r ang dist rep
 iterateLSystem n lsystem | n < 0 = iterateLSystem (-n) lsystem
+iterateLSystem n (LSystem na a ax r ang dist rep) =
+  iterateLSystem (n-1) $ LSystem na a ax' r ang dist rep
   where ax' = concat $ map f ax
         f x = case lookup x r of
                 Just xs -> xs
@@ -51,7 +52,7 @@ iterateLSystem n lsystem | n < 0 = iterateLSystem (-n) lsystem
 
 -- | Generate a set of instructions from an L-system
 instructions :: Eq a => LSystem a -> [Instruction]
-instructions (LSystem a ax r ang dist rep) = mapMaybe f ax
+instructions (LSystem na a ax r ang dist rep) = mapMaybe f ax
   where f x = lookup x rep
 
 -- | Draw a sequence of instructions
@@ -79,5 +80,5 @@ turtle angle distance = go 90 (Line [(0,0)]) (Pictures []) []
 
 -- | Draw an L-system
 drawLSystem :: Eq a => LSystem a -> Picture
-drawLSystem ls@(LSystem a ax r ang dist rep) = turtle ang dist $ instructions ls
+drawLSystem ls@(LSystem na a ax r ang dist rep) = turtle ang dist $ instructions ls
 
