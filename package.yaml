@@ -22,6 +22,7 @@ dependencies:
 - base >= 4.7 && < 5
 - gloss
 - optparse-applicative
+- safe
 
 library:
   source-dirs: src

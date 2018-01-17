@@ -4,6 +4,7 @@ import Graphics.Gloss
 import Options.Applicative
 import Data.Semigroup ((<>))
 import Data.List
+import Safe
 
 import Lib
 import Examples
@@ -11,6 +12,7 @@ import Examples
 data Options = Options
   { optionLSystem :: LSystem Char
   , optionIterations :: Integer
+  , optionColor :: Color
   }
 
 selectLSystem :: [LSystem a] -> String -> Either String (LSystem a)
@@ -43,8 +45,31 @@ listLSystems = infoOption (printList lsystems)
    <> help "List all available L-systems")
   where printList xs = "Available L-systems:\n" ++ unlines (map name xs)
 
+splitOn :: Char -> String -> [String]
+splitOn c s = case dropWhile (== c) s of
+                "" -> []
+                s' -> w:(splitOn c s'')
+                  where (w, s'') = break (== c) s'
+
+colorParser :: Parser Color
+colorParser = option (eitherReader readRGB)
+  (long "color"
+   <> short 'c'
+   <> help "Foreground color RGBA (0-255)"
+   <> showDefault
+   <> value white
+   <> metavar "R,G,B")
+  where readRGB  s = do
+          case mapM readEitherSafe $ splitOn ',' s of
+            Right (r:g:b:a:_) -> Right $ makeColorI r g b a
+            Right (r:g:b:_) -> Right $ makeColorI r g b 255
+            Right (r:g:_) -> Right $ makeColorI r g 255 255
+            Right (r:_) -> Right $ makeColorI r 255 255 255
+            Right  _  -> Right $ makeColorI 255 255 255 255
+            Left s -> Left s
+
 options :: Parser Options
-options = Options <$> lsystem <*> iterations
+options = Options <$> lsystem <*> iterations <*> colorParser
 
 opts :: ParserInfo Options
 opts = info (options <**> listLSystems <**> helper)
@@ -52,11 +77,11 @@ opts = info (options <**> listLSystems <**> helper)
   <> progDesc "Generate and draw an L-system"
   <> header "lsystems -- Generate L-systems")
 
-createDisplay :: (Eq a, Integral p) => p -> LSystem a -> IO ()
-createDisplay n ls = display (InWindow "L-System" (200, 200) (10, 10)) black (color white pic)
+createDisplay :: (Eq a, Integral p) => Color -> p -> LSystem a -> IO ()
+createDisplay c n ls = display (InWindow "L-System" (200, 200) (10, 10)) black (color c pic)
   where pic = drawLSystem $ iterateLSystem n ls
 
 main :: IO ()
 main = do
-  Options ls n <- execParser opts
-  createDisplay n ls
+  Options ls n c <- execParser opts
+  createDisplay c n ls
