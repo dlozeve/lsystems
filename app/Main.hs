@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import Graphics.Gloss
@@ -6,29 +7,16 @@ import Data.Semigroup ((<>))
 import Data.List
 import Safe
 
-import Lib
-import Examples
+import Data.Aeson
+import qualified Data.ByteString.Lazy.Char8 as B
 
-data Options = Options
-  { optionLSystem :: LSystem Char
-  , optionIterations :: Integer
+import Lib
+
+data CmdLnOptions = CmdLnOptions
+  { optionIterations :: Integer
   , optionColor :: Color
   , optionWhiteBg :: Bool
   }
-
-selectLSystem :: [LSystem a] -> String -> Either String (LSystem a)
-selectLSystem ls s = case find (\x -> name x == s) ls of
-  Just x -> Right x
-  Nothing -> Left $ "Cannot find L-system \"" ++ s ++ "\". Use -l to find all available L-systems."
-
-lsystemParser :: Parser (LSystem Char)
-lsystemParser = argument (eitherReader (selectLSystem lsystems))
-  (metavar "LSYSTEM"
-   <> help "L-system to generate"
-   <> showDefaultWith name
-   <> value penroseP3
-   <> completeWith (map name lsystems)
-   <> completer (listCompleter (map name lsystems)))
 
 iterationsParser :: Parser Integer
 iterationsParser = option auto
@@ -38,13 +26,6 @@ iterationsParser = option auto
    <> showDefault
    <> value 5
    <> metavar "N")
-
-listLSystemsParser :: Parser (a -> a)
-listLSystemsParser = infoOption (printList lsystems)
-  (long "list-lsystems"
-   <> short 'l'
-   <> help "List all available L-systems")
-  where printList xs = "Available L-systems:\n" ++ unlines (map name xs)
 
 splitOn :: Char -> String -> [String]
 splitOn c s = case dropWhile (== c) s of
@@ -75,22 +56,24 @@ whiteBackgroundParser = switch
    <> short 'w'
    <> help "Use a white background")
 
-optionsParser :: Parser Options
-optionsParser = Options <$>
-  lsystemParser <*> iterationsParser <*> colorParser <*> whiteBackgroundParser
+optionsParser :: Parser CmdLnOptions
+optionsParser = CmdLnOptions <$>
+  iterationsParser <*> colorParser <*> whiteBackgroundParser
 
-opts :: ParserInfo Options
-opts = info (optionsParser <**> listLSystemsParser <**> helper)
+opts :: ParserInfo CmdLnOptions
+opts = info (optionsParser <**> helper)
   ( fullDesc
   <> progDesc "Generate and draw an L-system"
   <> header "lsystems -- Generate L-systems")
 
 createDisplay :: (Eq a, Integral p) => Color -> Bool -> p -> LSystem a -> IO ()
-createDisplay fgColor wbg n ls = display (InWindow "L-System" (200, 200) (10, 10)) bgColor (color fgColor pic)
+createDisplay fgColor wbg n ls = display (InWindow (name ls) (200, 200) (10, 10)) bgColor (color fgColor pic)
   where pic = drawLSystem $ iterateLSystem n ls
         bgColor = if wbg then white else black
 
 main :: IO ()
 main = do
-  Options ls n fgColor wbg <- execParser opts
+  lsStr <- B.getContents
+  let Just ls = decode lsStr :: Maybe (LSystem Char)
+  CmdLnOptions n fgColor wbg <- execParser opts
   createDisplay fgColor wbg n ls

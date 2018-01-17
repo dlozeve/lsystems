@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Lib
     ( -- * L-system data types
       LSystem(..)
@@ -11,6 +13,11 @@ module Lib
 
 import Data.Maybe
 import Graphics.Gloss
+import GHC.Generics
+import Data.Aeson
+import qualified Data.Text.Lazy as T
+import qualified Data.Text as TS
+import qualified Data.ByteString.Lazy as B
 
 -- | L-system data type
 data LSystem a = LSystem
@@ -26,7 +33,12 @@ data LSystem a = LSystem
                                          -- defining how each variable
                                          -- and constant should be
                                          -- represented
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
+
+instance (FromJSON a) => FromJSON (LSystem a)
+
+instance (ToJSON a) => ToJSON (LSystem a) where
+    toEncoding = genericToEncoding defaultOptions
 
 -- | Instructions for displaying the L-system
 data Instruction =
@@ -36,8 +48,25 @@ data Instruction =
   | Push -- ^ push a position on the stack
   | Pop -- ^ pop a position from the stack
   | Stay -- ^ do nothing
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
 
+instance FromJSON Instruction where
+  parseJSON = withText "Instruction" $ \s ->
+    if s `elem` ["Forward", "forward", "F", "f"] then
+      pure Forward
+    else if s `elem` ["TurnRight", "Turnright", "turnright", "Right", "right", "R", "r"] then
+      pure TurnRight
+    else if s `elem` ["TurnLeft", "Turnleft", "turnleft", "Left", "left", "L", "l"] then
+      pure TurnLeft
+    else if s `elem` ["Push", "push"] then
+      pure Push
+    else if s `elem` ["Pop", "pop"] then
+      pure Pop
+    else
+      pure Stay
+
+instance ToJSON Instruction where
+  toEncoding = genericToEncoding defaultOptions
 
 -- | Iterate the L-system by n steps
 iterateLSystem :: (Eq a, Integral t) => t -> LSystem a -> LSystem a

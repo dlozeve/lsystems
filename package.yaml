@@ -23,6 +23,9 @@ dependencies:
 - gloss
 - optparse-applicative
 - safe
+- aeson
+- text
+- bytestring
 
 library:
   source-dirs: src
