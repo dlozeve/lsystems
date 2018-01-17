@@ -5,6 +5,7 @@ module Lib
       -- * L-system functions
     , iterateLSystem
     , instructions
+    , turtle
     , drawLSystem
     ) where
 
@@ -31,6 +32,8 @@ data Instruction =
   Forward -- ^ move forward
   | TurnRight -- ^ turn right by angle
   | TurnLeft -- ^ turn left by angle
+  | Push -- ^ push a position on the stack
+  | Pop -- ^ pop a position from the stack
   | Stay -- ^ do nothing
   deriving (Eq, Show)
 
@@ -55,18 +58,23 @@ turtle :: Float -- ^ angle
   -> Float -- ^ distance
   -> [Instruction] -- ^ sequence of instruction
   -> Picture -- ^ generated picture
-turtle angle distance = go 0 (Line [(0,0)])
-  where go _ ps [] = ps
-        go theta (Line path) (x:xs) =
-          case x of
-            Forward -> go theta (Line (p:path)) xs
-            TurnRight -> go (theta + angle) (Line path) xs
-            TurnLeft -> go (theta - angle) (Line path) xs
-            Stay -> go theta (Line path) xs
-          where
-            (px, py) = head path
-            thetaRad = theta * pi / 180
-            p = (px + distance * cos thetaRad, py + distance * sin thetaRad)
+turtle angle distance = go 90 (Line [(0,0)]) (Pictures []) []
+  where
+    go :: Float -> Picture -> Picture -> [(Point,Float)] -> [Instruction] -> Picture
+    go _ line (Pictures ps) _ [] = Pictures (line:ps)
+    go theta (Line path) (Pictures ps) stack (x:xs) =
+      case x of
+        Forward -> go theta (Line (p:path)) (Pictures ps) stack xs
+        TurnRight -> go (theta + angle) (Line path) (Pictures ps) stack xs
+        TurnLeft -> go (theta - angle) (Line path) (Pictures ps) stack xs
+        Push -> go theta (Line path) (Pictures ps) ((head path, theta):stack) xs
+        Pop -> let (pos, theta'):t = stack in
+          go theta' (Line [pos]) (Pictures ((Line path):ps)) t xs
+        Stay -> go theta (Line path) (Pictures ps) stack xs
+      where
+        (px, py) = head path
+        thetaRad = theta * pi / 180
+        p = (px + distance * cos thetaRad, py + distance * sin thetaRad)
 
 -- | Draw an L-system
 drawLSystem :: Eq a => LSystem a -> Picture

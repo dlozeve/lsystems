@@ -9,6 +9,8 @@ module Examples
   , sierpinski
   , sierpinskiArrow
   , dragon
+  , tree
+  , plant
   ) where
 
 import Lib
@@ -90,3 +92,23 @@ dragon = LSystem
          90
          10
          [('F',Forward), ('+',TurnRight), ('-',TurnLeft)]
+
+-- | Binary tree
+tree = LSystem
+       "AB+-[]"
+       "A"
+       [('B', "BB")
+       ,('A', "B[+A]-A")]
+       45
+       1
+       [('A',Forward), ('B',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
+
+-- | Fractal plant
+plant = LSystem
+        "FX+-[]"
+        "X"
+        [('X', "F[-X][X]F[-X]+FX")
+        ,('F', "FF")]
+        25
+        1
+        [('F',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
