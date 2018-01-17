@@ -1,0 +1,43 @@
+{
+  "name": "tree",
+  "alphabet": "AB+-[]",
+  "axiom": "A",
+  "rules": [
+    [
+      "B",
+      "BB"
+    ],
+    [
+      "A",
+      "B[+A]-A"
+    ]
+  ],
+  "angle": 45.0,
+  "distance": 1.0,
+  "representation": [
+    [
+      "A",
+      "Forward"
+    ],
+    [
+      "B",
+      "Forward"
+    ],
+    [
+      "+",
+      "TurnRight"
+    ],
+    [
+      "-",
+      "TurnLeft"
+    ],
+    [
+      "[",
+      "Push"
+    ],
+    [
+      "]",
+      "Pop"
+    ]
+  ]
+}

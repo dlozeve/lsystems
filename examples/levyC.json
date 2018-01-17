@@ -1,0 +1,27 @@
+{
+  "name": "levyC",
+  "alphabet": "F+-",
+  "axiom": "F",
+  "rules": [
+    [
+      "F",
+      "+F--F+"
+    ]
+  ],
+  "angle": 45.0,
+  "distance": 10.0,
+  "representation": [
+    [
+      "F",
+      "Forward"
+    ],
+    [
+      "+",
+      "TurnRight"
+    ],
+    [
+      "-",
+      "TurnLeft"
+    ]
+  ]
+}

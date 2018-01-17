@@ -1,0 +1,35 @@
+{
+  "name": "sierpinski",
+  "alphabet": "AB+-",
+  "axiom": "A-B-B",
+  "rules": [
+    [
+      "A",
+      "A-B+A+B-A"
+    ],
+    [
+      "B",
+      "BB"
+    ]
+  ],
+  "angle": 120.0,
+  "distance": 10.0,
+  "representation": [
+    [
+      "A",
+      "Forward"
+    ],
+    [
+      "B",
+      "Forward"
+    ],
+    [
+      "+",
+      "TurnRight"
+    ],
+    [
+      "-",
+      "TurnLeft"
+    ]
+  ]
+}

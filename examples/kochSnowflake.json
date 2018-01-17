@@ -1,0 +1,27 @@
+{
+  "name": "kochSnowflake",
+  "alphabet": "F+-",
+  "axiom": "F",
+  "rules": [
+    [
+      "F",
+      "F-F++F-F"
+    ]
+  ],
+  "angle": 60.0,
+  "distance": 10.0,
+  "representation": [
+    [
+      "F",
+      "Forward"
+    ],
+    [
+      "+",
+      "TurnRight"
+    ],
+    [
+      "-",
+      "TurnLeft"
+    ]
+  ]
+}
