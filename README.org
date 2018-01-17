@@ -51,12 +51,13 @@ command-line arguments, see the output of ~--help~:
 #+BEGIN_SRC 
 lsystems -- Generate L-systems
 
-Usage: lsystems-exe [LSYSTEM] [-n|--iterations N]
+Usage: lsystems-exe [LSYSTEM] [-n|--iterations N] [-l|--list-lsystems]
   Generate and draw an L-system
 
 Available options:
   LSYSTEM                  L-system to generate (default: penroseP3)
   -n,--iterations N        Number of iterations (default: 5)
+  -l,--list-lsystems       List all available L-systems
   -h,--help                Show this help text
 #+END_SRC
 

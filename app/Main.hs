@@ -16,7 +16,7 @@ data Options = Options
 selectLSystem :: [LSystem a] -> String -> Either String (LSystem a)
 selectLSystem ls s = case find (\x -> name x == s) ls of
   Just x -> Right x
-  Nothing -> Left $ "Cannot find L-system \"" ++ s ++ "\""
+  Nothing -> Left $ "Cannot find L-system \"" ++ s ++ "\". Use -l to find all available L-systems."
 
 lsystem :: Parser (LSystem Char)
 lsystem = argument (eitherReader (selectLSystem lsystems))
@@ -36,11 +36,18 @@ iterations = option auto
    <> value 5
    <> metavar "N")
 
+listLSystems :: Parser (a -> a)
+listLSystems = infoOption (printList lsystems)
+  (long "list-lsystems"
+   <> short 'l'
+   <> help "List all available L-systems")
+  where printList xs = "Available L-systems:\n" ++ unlines (map name xs)
+
 options :: Parser Options
 options = Options <$> lsystem <*> iterations
 
 opts :: ParserInfo Options
-opts = info (options <**> helper)
+opts = info (options <**> listLSystems <**> helper)
   ( fullDesc
   <> progDesc "Generate and draw an L-system"
   <> header "lsystems -- Generate L-systems")
