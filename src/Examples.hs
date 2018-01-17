@@ -11,6 +11,8 @@ module Examples
   , dragon
   , tree
   , plant
+  -- * Tilings
+  , penroseP3
   ) where
 
 import Lib
@@ -112,3 +114,18 @@ plant = LSystem
         25
         1
         [('F',Forward), ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]
+  
+-- | Penrose P3
+penroseP3 =
+  LSystem
+  "MNOPA+-[]"
+  "[N]++[N]++[N]++[N]++[N]"
+  [('M',"OA++PA----NA[-OA----MA]++")
+  ,('N',"+OA--PA[---MA--NA]+")
+  ,('O',"-MA++NA[+++OA++PA]-")
+  ,('P',"--OA++++MA[+PA++++NA]--NA")
+  ,('A',"")]
+  36
+  10
+  [('M',Forward), ('N',Forward), ('O',Forward), ('P',Forward), ('A',Forward),
+   ('+',TurnRight), ('-',TurnLeft), ('[',Push), (']',Pop)]

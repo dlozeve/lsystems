@@ -8,4 +8,4 @@ import Examples
 main :: IO ()
 main =
   display (InWindow "L-System" (200, 200) (10, 10)) black (color white pic)
-  where pic = drawLSystem $ iterateLSystem 7 plant
+  where pic = drawLSystem $ iterateLSystem 6 penroseP3
