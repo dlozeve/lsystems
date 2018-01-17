@@ -13,10 +13,16 @@ import qualified Data.ByteString.Lazy.Char8 as B
 import Lib
 
 data CmdLnOptions = CmdLnOptions
-  { optionIterations :: Integer
+  { optionFilename :: String
+  , optionIterations :: Integer
   , optionColor :: Color
   , optionWhiteBg :: Bool
   }
+
+filenameParser :: Parser String
+filenameParser = strArgument
+  (metavar "FILENAME"
+   <> help "JSON file specifying an L-system")
 
 iterationsParser :: Parser Integer
 iterationsParser = option auto
@@ -58,7 +64,7 @@ whiteBackgroundParser = switch
 
 optionsParser :: Parser CmdLnOptions
 optionsParser = CmdLnOptions <$>
-  iterationsParser <*> colorParser <*> whiteBackgroundParser
+  filenameParser <*> iterationsParser <*> colorParser <*> whiteBackgroundParser
 
 opts :: ParserInfo CmdLnOptions
 opts = info (optionsParser <**> helper)
@@ -73,7 +79,7 @@ createDisplay fgColor wbg n ls = display (InWindow (name ls) (200, 200) (10, 10)
 
 main :: IO ()
 main = do
-  lsStr <- B.getContents
+  CmdLnOptions f n fgColor wbg <- execParser opts
+  lsStr <- B.readFile f
   let Just ls = decode lsStr :: Maybe (LSystem Char)
-  CmdLnOptions n fgColor wbg <- execParser opts
   createDisplay fgColor wbg n ls
