@@ -45,10 +45,8 @@ iterateLSystem 0 lsystem = lsystem
 iterateLSystem n lsystem | n < 0 = iterateLSystem (-n) lsystem
 iterateLSystem n (LSystem na a ax r ang dist rep) =
   iterateLSystem (n-1) $ LSystem na a ax' r ang dist rep
-  where ax' = concat $ map f ax
-        f x = case lookup x r of
-                Just xs -> xs
-                Nothing -> [x]
+  where ax' = concatMap f ax
+        f x = fromMaybe [x] (lookup x r)
 
 -- | Generate a set of instructions from an L-system
 instructions :: Eq a => LSystem a -> [Instruction]
@@ -71,7 +69,7 @@ turtle angle distance = go 90 (Line [(0,0)]) (Pictures []) []
         TurnLeft -> go (theta - angle) (Line path) (Pictures ps) stack xs
         Push -> go theta (Line path) (Pictures ps) ((head path, theta):stack) xs
         Pop -> let (pos, theta'):t = stack in
-          go theta' (Line [pos]) (Pictures ((Line path):ps)) t xs
+          go theta' (Line [pos]) (Pictures (Line path : ps)) t xs
         Stay -> go theta (Line path) (Pictures ps) stack xs
       where
         (px, py) = head path

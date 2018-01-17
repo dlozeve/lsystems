@@ -49,7 +49,7 @@ listLSystemsParser = infoOption (printList lsystems)
 splitOn :: Char -> String -> [String]
 splitOn c s = case dropWhile (== c) s of
                 "" -> []
-                s' -> w:(splitOn c s'')
+                s' -> w : splitOn c s''
                   where (w, s'') = break (== c) s'
 
 colorParser :: Parser Color
@@ -60,7 +60,7 @@ colorParser = option (eitherReader readRGB)
    <> showDefault
    <> value white
    <> metavar "R,G,B")
-  where readRGB  s = do
+  where readRGB  s =
           case mapM readEitherSafe $ splitOn ',' s of
             Right (r:g:b:a:_) -> Right $ makeColorI r g b a
             Right (r:g:b:_) -> Right $ makeColorI r g b 255
