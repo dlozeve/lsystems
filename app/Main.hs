@@ -21,8 +21,8 @@ selectLSystem ls s = case find (\x -> name x == s) ls of
   Just x -> Right x
   Nothing -> Left $ "Cannot find L-system \"" ++ s ++ "\". Use -l to find all available L-systems."
 
-lsystem :: Parser (LSystem Char)
-lsystem = argument (eitherReader (selectLSystem lsystems))
+lsystemParser :: Parser (LSystem Char)
+lsystemParser = argument (eitherReader (selectLSystem lsystems))
   (metavar "LSYSTEM"
    <> help "L-system to generate"
    <> showDefaultWith name
@@ -30,8 +30,8 @@ lsystem = argument (eitherReader (selectLSystem lsystems))
    <> completeWith (map name lsystems)
    <> completer (listCompleter (map name lsystems)))
 
-iterations :: Parser Integer
-iterations = option auto
+iterationsParser :: Parser Integer
+iterationsParser = option auto
   (long "iterations"
    <> short 'n'
    <> help "Number of iterations"
@@ -39,8 +39,8 @@ iterations = option auto
    <> value 5
    <> metavar "N")
 
-listLSystems :: Parser (a -> a)
-listLSystems = infoOption (printList lsystems)
+listLSystemsParser :: Parser (a -> a)
+listLSystemsParser = infoOption (printList lsystems)
   (long "list-lsystems"
    <> short 'l'
    <> help "List all available L-systems")
@@ -69,17 +69,18 @@ colorParser = option (eitherReader readRGB)
             Right  _  -> Right $ makeColorI 255 255 255 255
             Left s -> Left s
 
-whiteBackground :: Parser Bool
-whiteBackground = switch
+whiteBackgroundParser :: Parser Bool
+whiteBackgroundParser = switch
   (long "white-background"
    <> short 'w'
    <> help "Use a white background")
 
-options :: Parser Options
-options = Options <$> lsystem <*> iterations <*> colorParser <*> whiteBackground
+optionsParser :: Parser Options
+optionsParser = Options <$>
+  lsystemParser <*> iterationsParser <*> colorParser <*> whiteBackgroundParser
 
 opts :: ParserInfo Options
-opts = info (options <**> listLSystems <**> helper)
+opts = info (optionsParser <**> listLSystemsParser <**> helper)
   ( fullDesc
   <> progDesc "Generate and draw an L-system"
   <> header "lsystems -- Generate L-systems")
