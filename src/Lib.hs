@@ -43,6 +43,7 @@ iterateLSystem :: (Eq a, Integral t) => t -> LSystem a -> LSystem a
 iterateLSystem 0 lsystem = lsystem
 iterateLSystem n (LSystem a ax r ang dist rep) =
   iterateLSystem (n-1) $ LSystem a ax' r ang dist rep
+iterateLSystem n lsystem | n < 0 = iterateLSystem (-n) lsystem
   where ax' = concat $ map f ax
         f x = case lookup x r of
                 Just xs -> xs
