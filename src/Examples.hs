@@ -2,8 +2,8 @@ module Examples
   ( -- * Space-filling curves
     gosper
   , hilbert
-  , levyC
     -- * Fractals
+  , levyC
   , koch
   , kochSnowflake
   , sierpinski

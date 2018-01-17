@@ -3,3 +3,68 @@
 [[https://travis-ci.org/dlozeve/lsystems][https://travis-ci.org/dlozeve/lsystems.svg?branch=master]]
 [[https://opensource.org/licenses/BSD-3-Clause][https://img.shields.io/badge/License-BSD%203--Clause-blue.svg]]
 
+Generate and draw [[https://en.wikipedia.org/wiki/L-system][L-systems]]!
+
+[[./img/demo.png]]
+
+** Introduction
+
+This program can be used to generate arbitrary L-systems. It supports:
++ full rewriting rules
++ full representation rules
++ personalized angle and segment length for the representation
++ push ('[') and pop (']') operations
+
+** ~LSystem~ data type
+
+An L-system consists of:
++ the L-system itself:
+  + an alphabet
+  + an axiom (i.e. the starting point)
+  + a set of rewriting rules (represented as a list of tuples)
++ rules to transform it into a graphical representation:
+  + an angle and a length
+  + a set of representation rules (which symbols mean "draw forward",
+    "turn left", "pop a position", etc.)
+
+** Building and running
+
+You will need [[https://docs.haskellstack.org/][Stack]].
+
+From the repository, run:
+#+BEGIN_SRC sh
+stack build
+stack exec lsystems-exe
+#+END_SRC
+
+This will open a window, where you can move around using the mouse and
+zoom by scrolling.
+
+For tests and documentation, run:
+#+BEGIN_SRC sh
+stack test --haddock
+#+END_SRC
+
+** Examples provided
+
+*** Space-filling curves
+
++ [[https://en.wikipedia.org/wiki/Hilbert_curve][Hilbert curve]]
++ [[https://en.wikipedia.org/wiki/Gosper_curve][Gosper curve]]
+
+*** Fractals
+
++ [[https://en.wikipedia.org/wiki/L%C3%A9vy_C_curve][Lévy C curve]]
++ [[https://en.wikipedia.org/wiki/Koch_snowflake][Koch snowflake]] and Koch curve
++ [[https://en.wikipedia.org/wiki/Sierpinski_triangle][Sierpinski triangle]] and Sierpinski arrow curve
++ [[https://en.wikipedia.org/wiki/Dragon_curve][Dragon curve]]
++ Binary tree and fractal plant
+
+*** Tilings
+
++ [[https://en.wikipedia.org/wiki/Penrose_tiling#Rhombus_tiling_(P3)][Penrose P3 tiling]]
+
+** Implementation
+
+The program is implemented in Haskell, using [[https://hackage.haskell.org/package/gloss][Gloss]] to display the
+generated L-systems.
