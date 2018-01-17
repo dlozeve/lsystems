@@ -13,6 +13,7 @@ data Options = Options
   { optionLSystem :: LSystem Char
   , optionIterations :: Integer
   , optionColor :: Color
+  , optionWhiteBg :: Bool
   }
 
 selectLSystem :: [LSystem a] -> String -> Either String (LSystem a)
@@ -68,8 +69,14 @@ colorParser = option (eitherReader readRGB)
             Right  _  -> Right $ makeColorI 255 255 255 255
             Left s -> Left s
 
+whiteBackground :: Parser Bool
+whiteBackground = switch
+  (long "white-background"
+   <> short 'w'
+   <> help "Use a white background")
+
 options :: Parser Options
-options = Options <$> lsystem <*> iterations <*> colorParser
+options = Options <$> lsystem <*> iterations <*> colorParser <*> whiteBackground
 
 opts :: ParserInfo Options
 opts = info (options <**> listLSystems <**> helper)
@@ -77,11 +84,12 @@ opts = info (options <**> listLSystems <**> helper)
   <> progDesc "Generate and draw an L-system"
   <> header "lsystems -- Generate L-systems")
 
-createDisplay :: (Eq a, Integral p) => Color -> p -> LSystem a -> IO ()
-createDisplay c n ls = display (InWindow "L-System" (200, 200) (10, 10)) black (color c pic)
+createDisplay :: (Eq a, Integral p) => Color -> Bool -> p -> LSystem a -> IO ()
+createDisplay fgColor wbg n ls = display (InWindow "L-System" (200, 200) (10, 10)) bgColor (color fgColor pic)
   where pic = drawLSystem $ iterateLSystem n ls
+        bgColor = if wbg then white else black
 
 main :: IO ()
 main = do
-  Options ls n c <- execParser opts
-  createDisplay c n ls
+  Options ls n fgColor wbg <- execParser opts
+  createDisplay fgColor wbg n ls
