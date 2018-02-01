@@ -1,0 +1,35 @@
+{
+  "name": "islands",
+  "alphabet": "Ff+-",
+  "axiom": "F+F+F+F",
+  "rules": [
+    [
+      "F",
+      "F+f-FF+F+FF+Ff+FF-f+FF-F-FF-Ff-FFF"
+    ],
+    [
+      "f",
+      "ffffff"
+    ]
+  ],
+  "angle": 90.0,
+  "distance": 10.0,
+  "representation": [
+    [
+      "F",
+      "Forward"
+    ],
+    [
+      "f",
+      "ForwardNoDraw"
+    ],
+    [
+      "+",
+      "TurnRight"
+    ],
+    [
+      "-",
+      "TurnLeft"
+    ]
+  ]
+}
