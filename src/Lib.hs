@@ -43,6 +43,7 @@ instance (ToJSON a) => ToJSON (LSystem a) where
 -- | Instructions for displaying the L-system
 data Instruction =
   Forward -- ^ move forward
+  | ForwardNoDraw -- ^ move forward, do not draw a line
   | TurnRight -- ^ turn right by angle
   | TurnLeft -- ^ turn left by angle
   | Push -- ^ push a position on the stack
@@ -54,6 +55,8 @@ instance FromJSON Instruction where
   parseJSON = withText "Instruction" $ \s ->
     if s `elem` ["Forward", "forward", "F", "f"] then
       pure Forward
+    else if s `elem` ["ForwardNoDraw", "forwardnodraw", "FN", "fn"] then
+      pure ForwardNoDraw
     else if s `elem` ["TurnRight", "Turnright", "turnright", "Right", "right", "R", "r"] then
       pure TurnRight
     else if s `elem` ["TurnLeft", "Turnleft", "turnleft", "Left", "left", "L", "l"] then
@@ -94,6 +97,7 @@ turtle angle distance = go 90 (Line [(0,0)]) (Pictures []) []
     go theta (Line path) (Pictures ps) stack (x:xs) =
       case x of
         Forward -> go theta (Line (p:path)) (Pictures ps) stack xs
+        ForwardNoDraw -> go theta (Line [p]) (Pictures (Line path : ps)) stack xs
         TurnRight -> go (theta + angle) (Line path) (Pictures ps) stack xs
         TurnLeft -> go (theta - angle) (Line path) (Pictures ps) stack xs
         Push -> go theta (Line path) (Pictures ps) ((head path, theta):stack) xs

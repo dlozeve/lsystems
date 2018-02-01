@@ -1,0 +1,27 @@
+{
+  "name": "cantor",
+  "alphabet": "AB",
+  "axiom": "A",
+  "rules": [
+    [
+      "A",
+      "ABA"
+    ],
+    [
+      "B",
+      "BBB"
+    ]
+  ],
+  "angle": 60.0,
+  "distance": 10.0,
+  "representation": [
+    [
+      "A",
+      "Forward"
+    ],
+    [
+      "B",
+      "ForwardNoDraw"
+    ]
+  ]
+}
