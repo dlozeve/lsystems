@@ -1,0 +1,35 @@
+{
+  "name": "plant2",
+  "alphabet": "F+-[]",
+  "axiom": "F",
+  "rules": [
+    [
+      "F",
+      "FF-[-F+F+F]+[+F-F-F]"
+    ]
+  ],
+  "angle": 22.5,
+  "distance": 10.0,
+  "representation": [
+    [
+      "F",
+      "Forward"
+    ],
+    [
+      "+",
+      "TurnRight"
+    ],
+    [
+      "-",
+      "TurnLeft"
+    ],
+    [
+      "[",
+      "Push"
+    ],
+    [
+      "]",
+      "Pop"
+    ]
+  ]
+}
