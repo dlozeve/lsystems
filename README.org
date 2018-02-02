@@ -7,6 +7,8 @@ Generate and draw [[https://en.wikipedia.org/wiki/L-system][L-systems]]!
 
 [[./img/demo.png]]
 
+Check the [[https://www.lozeve.com/post/lsystems/][accompanying blog post.]]
+
 ** Introduction
 
 This program can be used to generate arbitrary L-systems. It supports:
